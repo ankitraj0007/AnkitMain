@@ -10,28 +10,68 @@ import java.util.regex.Pattern;
 public class FaangSolution {
 
     public static void main(String[] args) {
-        reverseLinkedList();
+//        partialReverseLinkedList(3,5);
+//        reverseLinkedList();
 //        System.out.println(almostPalindrome());
 //        System.out.println(palindrome());
 //        longestSubstringWithoutRepeatingChar();
 //        backspaceStringCompare();
-//        trappingRainWater();
+        trappingRainWater();
 //        maxAreaInTank();
 //        System.out.println(findTargetPair(new int[]{1,3,4,5,6,8},10));
     }
 
+    //revert a linked list from m to n
+    public static void partialReverseLinkedList(int m, int n){
+        MyLinkedList myLinkedList = new MyLinkedList();
+        for (int i = 1; i <= 7; i++){
+            myLinkedList.addInLast(i);
+        }
+        myLinkedList.print();
+
+        int position = 1;
+        MyNode initialSegmentEndNode = null;
+        MyNode currentNode = myLinkedList.getHead();
+        while (position < m){
+            initialSegmentEndNode = currentNode;
+            currentNode = currentNode.getNext();
+            position++;
+        }
+
+        MyNode pointer1 = currentNode;
+        MyNode start = currentNode;
+        MyNode pointer2 = currentNode.getNext();
+        MyNode buff = null;
+        //1,2,3,4,5,6,7
+        while (position >= m && position <n){
+            buff = pointer2.getNext();
+
+            pointer2.setNext(pointer1);
+            pointer1 = pointer2;
+            pointer2 = buff;
+
+            position++;
+        }
+        initialSegmentEndNode.setNext(pointer1);
+        start.setNext(pointer2);
+        System.out.println("========");
+        myLinkedList.print();
+
+    }
+
+    //reverse a linked list
     public static void reverseLinkedList(){
         MyLinkedList linkedList = new MyLinkedList();
-        linkedList.addInLast(1);
-        linkedList.addInLast(2);
-        linkedList.addInLast(3);
-        linkedList.addInLast(4);
+        for (int i = 1; i <= 7; i++){
+            linkedList.addInLast(i);
+        }
         linkedList.print();
 
         //solution
         MyNode prevNode = null;
         MyNode currentNode = linkedList.getHead(); //1
 
+        //1,2,3,4,5,6,7
         while (currentNode != null){
             MyNode nextNode = currentNode.getNext();
             currentNode.setNext(prevNode);
@@ -89,6 +129,7 @@ public class FaangSolution {
         }
         return true;
     }
+
     public static void longestSubstringWithoutRepeatingChar(){
         String str = "abcbdaac"; //cbda -> 4
 
@@ -205,14 +246,14 @@ public class FaangSolution {
         int waterAccumulated = 0;
 
         int leftPointer = 0;
-        int rightPointed = arr.length-1;
+        int rightPointer = arr.length-1;
         int leftMax = arr[0];
         int rightMax = arr[arr.length-1];
 
         //{0,1,0,2,1,0,3,1,0,1,2};//0+0+1+0+1+2+0+1+2+1+0
-        while(leftPointer < rightPointed){
+        while(leftPointer < rightPointer){
 
-            if(arr[leftPointer] <= arr[rightPointed]){
+            if(arr[leftPointer] <= arr[rightPointer]){
                 if (arr[leftPointer] >= leftMax ){
                     leftMax = arr[leftPointer];
                 }else {
@@ -221,13 +262,13 @@ public class FaangSolution {
                 }
                 leftPointer++;
             }else{
-                if(arr[rightPointed] >= rightMax){
-                    rightMax = arr[rightPointed];
+                if(arr[rightPointer] >= rightMax){
+                    rightMax = arr[rightPointer];
                 }else {
-                    int volume = rightMax - arr[rightPointed];
+                    int volume = rightMax - arr[rightPointer];
                     waterAccumulated = waterAccumulated + volume;
                 }
-                rightPointed--;
+                rightPointer--;
             }
         }
         System.out.println(waterAccumulated);

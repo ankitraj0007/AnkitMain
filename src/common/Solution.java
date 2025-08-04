@@ -8,12 +8,14 @@ import java.util.stream.Collectors;
 public class Solution {
 
     public static void main(String[] args) {
-
+//        sumOfDigits();
+//        findGreatestCommonDivisor();
+//        findNumberOfVovels();
 //        splitArray();
 //        duplicateInSets();
 //        immutable();
 //        anagramString();
-        findNumberOfWordsWithSameCharacters();
+//        findNumberOfWordsWithSameCharacters();
 //        maxSumSubArray();
 //        balancedSubArrayLength();
 //        combinationWithTargetSum();
@@ -22,9 +24,47 @@ public class Solution {
 //        patternRowColumn();
 //        balancedBrackets();
 //        System.out.println(fibonacciUsingRecursion(4));
+        fibonacci(7);
 //        System.out.println(isOnlyOdd(new int[]{1, 5, 7, 9, 2}));
     }
 
+    private static void sumOfDigits() {
+        int num = 1234; //10
+
+        int sum =0 ;
+        while (num != 0){
+            int reminder = num % 10;
+            sum += reminder;
+            num = num / 10;
+        }
+        System.out.println(sum);
+    }
+
+    private static void findGreatestCommonDivisor() {
+        int num1 = 30;
+        int num2 = 18;
+
+        int smallest = num1 > num2 ? num2 : num1;
+
+        for(int i = smallest; i >=1; i--){
+            if(num1 % i == 0 && num2 % i == 0){
+                System.out.println(i);
+                return;
+            }
+        }
+    }
+
+    private static void findNumberOfVovels() {
+        String str = "Ankit Raj";
+        String volels = "aeiouAEIOU";
+
+        int vovelCount = 0;
+        char[] chararr = str.toCharArray();
+        for(char c : chararr){
+            if(volels.indexOf(c) != -1) vovelCount++;
+        }
+        System.out.println(vovelCount);
+    }
 
 
     /* int[] original = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -421,6 +461,18 @@ public class Solution {
         } else {
             return fibonacciUsingRecursion(count - 1) + fibonacciUsingRecursion(count - 2);
         }
+    }
+
+    public static void fibonacci(int num){
+        int a = 0, b = 1;
+        System.out.print(a + ", " + b + ", ");
+        for(int i = 2; i < 7; i++){
+            int next = a + b;
+            System.out.print(next + ", ");
+            a = b;
+            b = next;
+        }
+
     }
 
     //int[] arr= {1,5,7,9,2};

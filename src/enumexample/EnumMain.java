@@ -28,16 +28,10 @@ public class EnumMain {
         }
 
         Enum3 e3 = Enum3.baby;
+        System.out.println(e3.gender());
 
-        switch (e3) {
-            case Ankit:
-                System.out.println(e3.gender());
-                break;
-            case Aparna:
-                System.out.println(e3.gender());
-                break;
-            default:
-                System.out.println(e3.gender());
+        for( Enum1 enum1 : Enum1.values()){
+            System.out.println(enum1);
         }
 
         variablArgumnt("variable argumnt example", 1, 2, 3);

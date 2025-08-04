@@ -12,7 +12,8 @@ import static java.util.stream.Collectors.*;
 public class Java8Solution {
 
     public static void main(String[] args) {
-        findFirstNonRepeatedChar();
+        mapOddEven();
+//        findFirstNonRepeatedChar();
 //        findSecondMax();
 //        findEmployeeOnCondition();
 //        sortOnSalary();
@@ -23,6 +24,20 @@ public class Java8Solution {
 //        countIntOccInArray();
 //        countStringOccurrence();
 
+    }
+
+    public static void mapOddEven(){
+        List<Integer> integers = Arrays.asList(1,2,3,4,5);
+        Map<Integer, String> collect = integers.stream().collect(toMap(
+                i -> i,
+                i -> {
+                    if (i % 2 == 0) {
+                        return "even";
+                    }
+                    return "odd";
+                }
+        ));
+        System.out.println(collect);
     }
 
     public static void findFirstNonRepeatedChar(){

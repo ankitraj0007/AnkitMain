@@ -16,7 +16,20 @@ public class MyMain {
 
     public static void main(String[] args) {
 
+//        System.out.println("ankit");
+//        ArrayList<String> arr = new ArrayList<>();
+//        arr.add("ankit");
+//        arr.add("raj");
+//        System.out.println(arr);
 
+        Thread myThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("myThread");
+            }
+        });
+        myThread.start();
+        System.out.println(Thread.currentThread().getName());
     }
 
 }

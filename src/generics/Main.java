@@ -18,6 +18,10 @@ public class Main {
 
         MyGeneric myGeneric = myGenericReturn(2.2);
         myGeneric.print();
+
+        GenericMethod genericMethod = new GenericMethod();
+        System.out.println(genericMethod.isEqual( 10, 10 ));
+        System.out.println(genericMethod.isEqual("ankit", "raj"));
     }
 
     public static <T,U> void myGenericMethod(T t, U u){
