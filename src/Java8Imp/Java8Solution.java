@@ -3,6 +3,7 @@ package Java8Imp;
 import common.pojo.Employee;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -12,7 +13,8 @@ import static java.util.stream.Collectors.*;
 public class Java8Solution {
 
     public static void main(String[] args) {
-        mapOddEven();
+        findCharOccurence();
+//        mapOddEven();
 //        findFirstNonRepeatedChar();
 //        findSecondMax();
 //        findEmployeeOnCondition();
@@ -24,6 +26,30 @@ public class Java8Solution {
 //        countIntOccInArray();
 //        countStringOccurrence();
 
+    }
+
+    public static void findCharOccurence() {
+        String str = "a,b,c,a,a,b,d,d";
+        char[] chr = str.toCharArray();
+
+        //1st way
+        HashMap<Character, Long> charOccurence = str.chars().mapToObj(c -> (char) c). //Stream<Character>
+                filter(c -> c != ',').
+                collect(Collectors.groupingBy(c -> c, HashMap::new, Collectors.counting()));
+        System.out.println(charOccurence);
+
+        //2nd way
+        Stream<Character> charStream = IntStream.range(0, chr.length).mapToObj(i -> chr[i]);
+        HashMap<Character, Long> charOccurence1 = charStream.
+                filter(c -> c != ',').
+                collect(Collectors.groupingBy(c -> c, HashMap::new, Collectors.counting()));
+        System.out.println(charOccurence1);
+
+        //3rd way
+        Map<String, Long> charCount = str.codePoints().mapToObj(Character::toString)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        charCount.remove(",");
+        System.out.println(charCount);
     }
 
     public static void mapOddEven(){
@@ -185,8 +211,8 @@ public class Java8Solution {
     public static void countStringOccurrence(){
         List<String> fruitsList = Arrays.asList("Apple", "Banana", "Apple", "Orange");
 
-        TreeMap<String, Long> collect = fruitsList.stream().collect(groupingBy(
-                str -> str, TreeMap::new, counting()
+        TreeMap<String, Long> collect = fruitsList.stream().collect(Collectors.groupingBy(
+                str -> str, TreeMap::new, Collectors.counting()
         ));
         System.out.println(collect);
     }

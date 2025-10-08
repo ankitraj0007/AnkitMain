@@ -24,28 +24,38 @@ public class MyLRU {
     }
 
     public void put(int val){
-        if(map.size() < capacity){
-            pointer.addFirst(val);
-            map.put(val,val);
-        }else {
-            //remove lru
-            int toBeRemoved = pointer.getLast();
-            map.remove(toBeRemoved);
-            pointer.removeLast();
+        int key = val;
+        if(map.containsKey(key)){
+            // Update the value and move the key to the front of the pointer
+            map.put(key, val);
+            pointer.removeFirstOccurrence(key);
+            pointer.addFirst(key);
+        } else {
+            if(map.size() < capacity){
+                pointer.addFirst(key);
+                map.put(key, val);
+            }else {
+                // Remove the least recently used key
+                int toBeRemoved = pointer.getLast();
+                map.remove(toBeRemoved);
+                pointer.removeLast();
 
-            map.put(val,val);
-            pointer.addFirst(val);
+                // Add the new key-value pair
+                map.put(key, val);
+                pointer.addFirst(key);
+            }
         }
     }
 
     public void display(){
-        map.forEach((k,v) -> System.out.print(v + ","));
+        pointer.forEach(value -> System.out.print(value + ","));
     }
 
     public static void main(String[] args) {
         MyLRU myLRU = new MyLRU(3);
         myLRU.put(34);
         myLRU.put(55);
+        myLRU.put(34);
         myLRU.put(43);
         myLRU.get(34);
         myLRU.put(98);

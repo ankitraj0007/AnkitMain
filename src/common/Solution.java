@@ -2,8 +2,6 @@ package common;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class Solution {
 
@@ -17,15 +15,29 @@ public class Solution {
 //        anagramString();
 //        findNumberOfWordsWithSameCharacters();
 //        maxSumSubArray();
-//        balancedSubArrayLength();
-//        combinationWithTargetSum();
-//        target();
+        longestBalancedLength();
+//        isBalancedBrackets();
+//        combinationOfSumElements();
+//        sumPair();
 //        reverseWords();
 //        patternRowColumn();
-//        balancedBrackets();
-//        System.out.println(fibonacciUsingRecursion(4));
-        fibonacci(7);
+//        System.out.println(fibonacciUsingDynamicProgramming(10));
+//        System.out.println(fibonacciUsingRecursion(10));
+//        fibonacciUsingLoop(10);
+//        System.out.println(factorial(5));
+//        System.out.println(recursiveBinarySearch(new int[]{-111, -15, 1, 70, 88, 99, 100}, 1));
+//        System.out.println(iterativeBinarySearch(new int[]{-111, -15, 1, 70, 88, 99, 100}, 1));
+//        reverseString();
+//        swapIntWithoutUsingThirdVariable();
+//        hasViwel();
+//        isPrime();
+//        removeSpaceFromString();
+//        trimSpaceFromStartAndEnd();
+//        heap();
+//        findCharOccurence();
+//        reverseALinkedList();
 //        System.out.println(isOnlyOdd(new int[]{1, 5, 7, 9, 2}));
+//        System.out.println(checkPalindromeString("ankit"));
     }
 
     private static void sumOfDigits() {
@@ -250,42 +262,108 @@ public class Solution {
     //You have given a string that contains the braces (brackets), both opening and closing braces. You have to find the length of the longest balanced subarray.
     //input: {}{}{() output: 4
     //input: (({}[]()((}}{}{} output: 6
-    public static void balancedSubArrayLength(){
-        String str = "(({}[]()((}}{}{}";
+    // ({[]})]{} : 6
+    public static void longestBalancedLength() {
+        String s = "(({}[]()((}}{}{}";
 
-        char[] charArray = str.toCharArray();
+        char[] charArray = s.toCharArray();
+        int len = s.length();
+        int maxLen = 0;
 
-        char openCurl = '{';
-        char closeCurl = '}';
+        for(int i=0; i<len; i++){
+            Stack<Character> stack = new Stack<>();
+            for(int j=i; j<len; j++){
+                if(charArray[j] == '{' || charArray[j] == '(' || charArray[j] == '['){
+                    stack.push(charArray[j]);
+                }else {
+                    if( !stack.isEmpty() &&
+                            ((charArray[j] == '}' && stack.peek()=='{') ||
+                            (charArray[j] == ')' && stack.peek()=='(') ||
+                            (charArray[j] == ']' && stack.peek()=='['))
+                    )
+                    {
+                        stack.pop();
+                    }else {
+                        break;
+                    }
+                }
 
-        char openBrac = '[';
-        char closeBrac = ']';
+                if(stack.isEmpty()){
+                    maxLen = Math.max(maxLen, j-i+1);
+                }
 
-        char openPara = '(';
-        char closePara = ')';
-
-        int balanced = 0;
-        int maxBalanced = 0;
-
-        for (int i =0; i< charArray.length; i++){
-            if(balanced > maxBalanced){
-                maxBalanced = balanced;
             }
-            if((charArray[i] == openCurl && charArray[i+1] == closeCurl)
-                    || (charArray[i] == openBrac && charArray[i+1] == closeBrac)
-                    || (charArray[i] == openPara && charArray[i+1] == closePara)){
-                i++;
-                balanced = balanced+2;
-            }else {
-                balanced = 0;
+
+        }
+
+//        int n = s.length();
+//        int maxLen = 0;
+//
+//        for (int start = 0; start < n; start++) {
+//            Stack<Character> stack = new Stack<>();
+//            for (int end = start; end < n; end++) {
+//                char ch = s.charAt(end);
+//
+//                // Opening bracket check
+//                if (ch == '(' || ch == '{' || ch == '[') {
+//                    stack.push(ch);
+//                }
+//                // Closing bracket check
+//                else if (ch == ')' || ch == '}' || ch == ']') {
+//                    if (!stack.isEmpty() &&
+//                            ((stack.peek() == '(' && ch == ')') ||
+//                                    (stack.peek() == '{' && ch == '}') ||
+//                                    (stack.peek() == '[' && ch == ']'))) {
+//                        stack.pop();
+//                    } else {
+//                        break; // invalid closing, stop
+//                    }
+//                }
+//
+//                // Balanced substring check
+//                if (stack.isEmpty()) {
+//                    maxLen = Math.max(maxLen, end - start + 1);
+//                }
+//            }
+//        }
+        System.out.println(maxLen);
+    }
+
+    //Brackets balanced? Sample I/p can be ({[]}), {[(])}, ([{})] [()()]{} ((((]])) ((((]]))]
+    public static void isBalancedBrackets() {
+        String s = "({[)]}";
+        if (s.length()%2 != 0){
+            System.out.println(false);
+            return;
+        }
+        char[] charArray = s.toCharArray();
+
+        Stack<Character> stack = new Stack<>();
+
+        for (int i = 0; i < charArray.length; i++) {
+            if (i == 0) {
+                stack.push(charArray[i]);
+            } else {
+                if ((charArray[i] == ')' && stack.peek() == '(')
+                        || (charArray[i] == '}' && stack.peek() == '{')
+                        || (charArray[i] == ']' && stack.peek() == '[')) {
+                    stack.pop();
+                } else {
+                    stack.push(charArray[i]);
+                }
             }
         }
-        System.out.println(maxBalanced);
+
+        if (stack.isEmpty()) {
+            System.out.println(true);
+        } else {
+            System.out.println(false);
+        }
     }
 
     // target with more than 2 elements combination
-    public static void combinationWithTargetSum(){
-        int[] arr = new int[]{19,1,3,5,7,10}; // 13-> 3,10  1,5,7
+    public static void combinationOfSumElements(){
+        int[] arr = {19,1,3,5,7,10}; // 13-> 3,10  1,5,7
         int target = 13;
         printArray(arr);
 
@@ -322,9 +400,9 @@ public class Solution {
     //int arr[] = {1, 3, 4, 7, 14, 16, 20};
     //int target = 24;
     //sol: indexes -> 2,6
-    public static void target() {
+    public static void sumPair() {
         int[] arr = new int[]{1, 3, 4, 7, 14, 16, 20};
-        int target = 24;
+        int target = 18;
         printArray(arr);
         System.out.println("target: "+target);
 
@@ -334,21 +412,17 @@ public class Solution {
         Map<Integer, Integer> map = new HashMap<>();
         for (int i = 0; i < arr.length; i++) {
             int desiredPair = target - arr[i];
-            if(map.containsValue(arr[i])){
-                secondElement = arr[i];
+            if(map.containsKey(desiredPair)){
                 firstElement = desiredPair;
+                secondElement = arr[i];
+                System.out.println("firstElement: "+firstElement+", secondElement: "+secondElement);
+                return;
             }else {
-                map.put(arr[i], target - arr[i]);
+                map.put(arr[i], desiredPair);
             }
         }
 
-        System.out.println(map);
-        if (firstElement+secondElement == target){
-            System.out.println("firstElement: "+firstElement+", secondElement: "+secondElement);
-        }else {
-            System.out.println("no pair found");
-        }
-
+        System.out.println("no pair found");
 
 //        for (int i = 0; i < arr.length; i++) {
 //            if (map.containsValue(arr[i])) {
@@ -413,86 +487,44 @@ public class Solution {
         }
     }
 
-    //Brackets balanced? Sample I/p can be ({[]}), {[(])}, ([{})] [()()]{} ((((]])) ((((]]))]
-    public static void balancedBrackets() {
-        String s = "[()()]{}";
-        if (s.length()%2 != 0){
-            System.out.println(false);
-            return;
+    public static int fibonacciUsingDynamicProgramming(int n) {
+        Map<Integer, Integer> memo = new HashMap<>();
+        return fibMemoize(n, memo);
+    }
+
+    private static int fibMemoize(int n, Map<Integer, Integer> memo) {
+        if (n <= 1) return n;
+        if (memo.containsKey(n)) return memo.get(n);
+
+        int result = fibMemoize(n - 1, memo) + fibMemoize(n - 2, memo);
+        memo.put(n, result);
+        return result;
+    }
+
+    public static int fibonacciUsingRecursion(int n) {
+        if (n <= 1) {
+            return n;
+        } else {
+            return fibonacciUsingRecursion(n - 1) + fibonacciUsingRecursion(n - 2);
         }
-        char[] chr = s.toCharArray();
-        char para = '(';
-        char oppPara = ')';
-        char cur = '{';
-        char oppCur = '}';
-        char brak = '[';
-        char oppBrak = ']';
+    }
 
-        Stack<Character> stack = new Stack<>();
+    public static void fibonacciUsingLoop(int count) {
+        int curr = 0;
+        int past = 0;
+        int pastToPast = 0;
 
-        for (int i = 0; i < chr.length; i++) {
-            if (i == 0) {
-                stack.push(chr[i]);
+        for (int i = 0; i < count; i++) {
+            if (i == 0 || i == 1) {
+                System.out.print(i + ", ");
+                past = i;
             } else {
-                if ((chr[i] == oppPara && stack.peek() == para)
-                        || (chr[i] == oppCur && stack.peek() == cur)
-                        || (chr[i] == oppBrak && stack.peek() == brak)) {
-//                if (chr[i] == para && stack.peek() == oppPara || chr[i] == cur && stack.peek() == oppCur || chr[i] == brak && stack.peek() == oppBrak || chr[i] == oppPara && stack.peek() == para || chr[i] == oppCur && stack.peek() == cur || chr[i] == oppBrak && stack.peek() == brak) {
-                    stack.pop();
-                } else {
-                    stack.push(chr[i]);
-                }
+                curr = past + pastToPast;
+                System.out.print(curr + ", ");
+                pastToPast = past;
+                past = curr;
             }
         }
-
-        if (stack.isEmpty()) {
-            System.out.println(true);
-        } else {
-            System.out.println(false);
-        }
-    }
-
-    //	for(int i=0;i<4;i++) {
-//		System.out.print(fibonacciUsingRecursion(i)+", ");
-//	}
-    public static int fibonacciUsingRecursion(int count) {
-        if (count <= 1) {
-            return count;
-        } else {
-            return fibonacciUsingRecursion(count - 1) + fibonacciUsingRecursion(count - 2);
-        }
-    }
-
-    public static void fibonacci(int num){
-        int a = 0, b = 1;
-        System.out.print(a + ", " + b + ", ");
-        for(int i = 2; i < 7; i++){
-            int next = a + b;
-            System.out.print(next + ", ");
-            a = b;
-            b = next;
-        }
-
-    }
-
-    //int[] arr= {1,5,7,9,2};
-    //System.out.println(isOnlyOdd(arr));
-    public static boolean isOnlyOdd(int[] arr) {
-        for (int i = 0; i < arr.length; i++) {
-            if (arr[i] % 2 == 0) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public static boolean checkPalindromeString(String input) {
-        for (int i = 0; i < input.length() / 2; i++) {
-            if (input.charAt(i) != input.charAt(input.length() - i - 1)) {
-                return false;
-            }
-        }
-        return true;
     }
 
     public static int factorial(int num) {
@@ -514,7 +546,30 @@ public class Solution {
 //		System.out.println(recursiveBinarySearch(arr, 1));
 //		System.out.println(recursiveBinarySearch(arr, 20));
 //		System.out.println(recursiveBinarySearch(arr, 200));
+    //binary search using recursion
+    public static int recursiveBinarySearch(int[] arr, int item) {
+        return recursiveBinarySearch(arr, 0, arr.length, item);
+    }
+
+    //{-111,-15,1,70,88,99,100}
+    private static int recursiveBinarySearch(int[] arr, int start, int end, int item) {
+
+        if (start >= end) {
+            return -1;
+        }
+
+        int mid = (start + end) / 2;
+        if (arr[mid] == item) {
+            return mid;
+        } else if (item > arr[mid]) {
+            return recursiveBinarySearch(arr, mid + 1, end, item);
+        } else {
+            return recursiveBinarySearch(arr, start, mid, item);
+        }
+    }
+
     //binary search using iteration (i.e while loop)
+    //binary search only possible for sorted array
     public static int iterativeBinarySearch(int[] arr, int item) {
         int start = 0;
         int end = arr.length;
@@ -533,28 +588,7 @@ public class Solution {
         return -1;
     }
 
-    //binary search using recursion
-    public static int recursiveBinarySearch(int[] arr, int item) {
-        return recursiveBinarySearch(arr, 0, arr.length, item);
-    }
-
-    //{-111,-15,1,70,88,99,100}
-    private static int recursiveBinarySearch(int[] arr, int start, int end, int item) {
-        if (start >= end) {
-            return -1;
-        }
-
-        int mid = (start + end) / 2;
-        if (arr[mid] == item) {
-            return mid;
-        } else if (item > arr[mid]) {
-            return recursiveBinarySearch(arr, mid + 1, end, item);
-        } else {
-            return recursiveBinarySearch(arr, start, mid, item);
-        }
-    }
-
-    public void reverseString() {
+    public static void reverseString() {
         String str1 = "My name is  Ankit";
 
         char[] char1 = str1.toCharArray();
@@ -567,7 +601,7 @@ public class Solution {
         System.out.println(builder);
     }
 
-    public void swapIntWithoutUsingThirdVariable() {
+    public static void swapIntWithoutUsingThirdVariable() {
         int a = 10;
         int b = 20;
         System.out.println("a=" + a + " b=" + b);
@@ -579,14 +613,14 @@ public class Solution {
         System.out.println("a=" + a + " b=" + b);
     }
 
-    public void hasViwel() {
+    public static void hasViwel() {
         String str1 = "ankit";
 
         boolean hasVowel = str1.matches(".*[aeiou].*") ? true : false;
         System.out.println(hasVowel);
     }
 
-    public void isPrime() {
+    public static void isPrime() {
         int i = 19;
 
         int half = i / 2;
@@ -602,26 +636,7 @@ public class Solution {
         System.out.println(isPrime);
     }
 
-    public void fibonacciUsingLoop() {
-        int count = 10;
-        int curr = 0;
-        int past = 0;
-        int pastToPast = 0;
-
-        for (int i = 0; i < count; i++) {
-            if (i == 0 || i == 1) {
-                System.out.print(i + ", ");
-                past = i;
-            } else {
-                curr = past + pastToPast;
-                System.out.print(curr + ", ");
-                pastToPast = past;
-                past = curr;
-            }
-        }
-    }
-
-    public void removeSpaceFromString() {
+    public static void removeSpaceFromString() {
         String str = "i am ankit";
 
         //remove space
@@ -635,7 +650,7 @@ public class Solution {
         System.out.println(sb);
     }
 
-    public void trimSpaceFromStartAndEnd() {
+    public static void trimSpaceFromStartAndEnd() {
         String str = "  i am ankit     ";
         System.out.println(str);
 
@@ -670,7 +685,7 @@ public class Solution {
     }
 
     //PriorityQueue is the jdk implementation of min heap
-    public void heap() {
+    public static void heap() {
         PriorityQueue<Integer> pq = new PriorityQueue<Integer>();
 
         pq.add(90);
@@ -679,17 +694,20 @@ public class Solution {
         pq.add(87);
         pq.add(-9);
 
-//		System.out.println(pq.peek());
-//		System.out.println(pq.remove());
-//		System.out.println(pq.peek());
-//		System.out.println(pq.poll());
-//		System.out.println(pq.remove(87));
-//		System.out.println(pq.peek());
+        Arrays.stream(pq.toArray()).forEach((a) -> System.out.print(a + ", "));
+        System.out.println();
+
+        System.out.println(pq.peek());
+        System.out.println(pq.remove());
+        System.out.println(pq.peek());
+        System.out.println(pq.poll());
+        System.out.println(pq.remove(87));
+        System.out.println(pq.peek());
 
         Arrays.stream(pq.toArray()).forEach((a) -> System.out.print(a + ", "));
     }
 
-    public void findCharOccurence() {
+    public static void findCharOccurence() {
         String str = "a,b,c,a,a,b,d,d";
 
         char[] chr = str.toCharArray();
@@ -708,15 +726,9 @@ public class Solution {
         }
 
         System.out.println(map);
-
-        //java8
-        Map<String, Long> charCount = str.codePoints().mapToObj(Character::toString)
-                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
-        charCount.remove(",");
-        System.out.println(charCount);
     }
 
-    public void reverseALinkedList() {
+    public static void reverseALinkedList() {
         LinkedList<Integer> linkedList = new LinkedList<>();
         linkedList.add(1);
         linkedList.add(2);
@@ -739,6 +751,26 @@ public class Solution {
         LinkedList<Integer> linkedList2 = new LinkedList<>();
         linkedList.descendingIterator().forEachRemaining(linkedList2::add);
         System.out.println(linkedList2);
+    }
+
+    //int[] arr= {1,5,7,9,2};
+    //System.out.println(isOnlyOdd(arr));
+    public static boolean isOnlyOdd(int[] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] % 2 == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean checkPalindromeString(String input) {
+        for (int i = 0; i < input.length() / 2; i++) {
+            if (input.charAt(i) != input.charAt(input.length() - i - 1)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static void printArray(int[] arr){
